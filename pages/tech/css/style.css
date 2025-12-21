@@ -1,0 +1,735 @@
+/* 1. CSS VARIABLES (Theme System) */
+:root {
+    /* Default Dark Mode ("Black Hole") */
+    --bg-color: #0a0a0a;
+    --bg-secondary: #111111;
+    --bg-accent: #1a1a1a;
+    --text-color: #EAEAEA;
+    --text-muted: #888888;
+    --border-color: #2A2A2A;
+    --border-hover: #555555;
+
+    /* Action Colors */
+    --primary-btn: #EAEAEA;
+    --primary-btn-text: #101010;
+    --accent-glow: rgba(255, 255, 255, 0.05);
+
+    /* Layout */
+    --container-width: 1600px;
+    --header-height: 70px;
+    --spacing: 2rem;
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+/* Light Mode Overrides */
+[data-theme="light"] {
+    --bg-color: #FFFFFF;
+    --bg-secondary: #F9F9F9;
+    --bg-accent: #F0F0F0;
+    --text-color: #101010;
+    --text-muted: #555555;
+    --border-color: #DDDDDD;
+    --border-hover: #AAAAAA;
+    --accent-glow: rgba(0, 0, 0, 0.05);
+
+    --primary-btn: #101010;
+    --primary-btn-text: #FFFFFF;
+}
+
+/* 2. GLOBAL RESET & BASE */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html{
+    scroll-behavior: smooth;
+}
+
+body {
+    /* Uses San Francisco (Mac), Segoe UI (Windows), Roboto (Android) automatically */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    
+    /* Keep your existing settings */
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, .logo {
+    /* Clean, bold, modern headers */
+    font-family: system-ui, -apple-system, sans-serif;
+    letter-spacing: -1px; /* Tighter spacing looks more premium */
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+ul {
+    list-style: none;
+}
+
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+}
+
+
+h1 {
+    font-size: 3rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+/* 3. LAYOUT UTILITIES */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.section-pad {
+    padding: 5rem 0;
+}
+
+/* 4. NAVIGATION (Enhanced) */
+#theme-logo {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.site-header {
+    height: var(--header-height);
+    background: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+/* Fix for Safari/Firefox backdrop filter support if needed, fallback to opacity */
+@supports not (backdrop-filter: blur(10px)) {
+    .site-header {
+        background: var(--bg-secondary);
+    }
+}
+
+.site-header nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Logo Styling with Icon */
+.logo {
+    font-weight: 700;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo svg {
+    width: 28px;
+    height: 28px;
+    fill: var(--text-color);
+    transition: var(--transition);
+}
+
+.logo:hover svg {
+    transform: rotate(15deg);
+}
+
+/* Desktop Nav Links */
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    align-items: center;
+}
+
+.nav-links a {
+    position: relative;
+}
+
+/* Underline Hover Effect */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -4px;
+    left: 0;
+    background-color: var(--primary-btn);
+    transition: var(--transition);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Theme Toggle Button */
+#theme-toggle {
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: var(--transition);
+    background: var(--bg-accent);
+    border: 1px solid var(--border-color);
+    width: 40px;
+    height: 40px;
+}
+
+#theme-toggle:hover {
+    border-color: var(--text-muted);
+    transform: scale(1.05);
+}
+
+/* Mobile Menu Button (Hamburger) - Hidden on desktop */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    width: 30px;
+    z-index: 1001;
+}
+
+.menu-toggle span {
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-color);
+    transition: var(--transition);
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: var(--primary-btn);
+    color: var(--primary-btn-text);
+    padding: 0.8rem 2rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+
+/* 6. MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+    :root {
+        --header-height: 60px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+  
+
+    /* Mobile Navigation Logic */
+    .menu-toggle {
+        display: flex;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        height: calc(100vh - var(--header-height));
+        background-color: var(--bg-color);
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 2rem;
+        transform: translateX(100%);
+        /* Hidden by default */
+        transition: transform 0.3s ease-in-out;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .nav-links.active {
+        transform: translateX(0);
+        /* Slide in */
+    }
+
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 1rem;
+        font-size: 1.2rem;
+    }
+
+    #theme-toggle {
+        margin: 0 auto;
+    }
+
+    /* Hamburger Animation */
+    .menu-toggle.open span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .menu-toggle.open span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.open span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+}/* --- EXPANDED FOOTER STYLING --- */
+
+.site-footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    padding: 5rem 0 2rem 0; /* More padding on top */
+    font-size: 0.95rem;
+}
+
+/* 1. Grid Layout */
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr; /* Brand col is wider */
+    gap: 4rem;
+    margin-bottom: 4rem;
+}
+
+/* 2. Brand Column */
+.footer-brand-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+.footer-desc {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Social Icons */
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-links a {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--bg-accent);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: var(--primary-btn);
+    color: var(--primary-btn-text);
+    border-color: var(--primary-btn);
+    transform: translateY(-2px);
+}
+
+.social-links svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* 3. Navigation Columns */
+.footer-col h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    letter-spacing: 0.5px;
+}
+
+.footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.footer-col a {
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+    display: inline-block;
+}
+
+.footer-col a:hover {
+    color: var(--primary-btn);
+    transform: translateX(2px); /* Subtle slide effect */
+}
+
+/* 4. Bottom Copyright */
+.footer-bottom {
+    border-top: 1px solid var(--border-color);
+    padding-top: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr; /* 2 columns on tablets */
+        gap: 3rem;
+    }
+    
+    .footer-brand-col {
+        grid-column: span 2; /* Brand takes full width */
+        text-align: center;
+        align-items: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-grid {
+        grid-template-columns: 1fr; /* Stack vertically on mobile */
+        gap: 2.5rem;
+        text-align: center;
+    }
+    
+    .footer-brand-col {
+        grid-column: span 1;
+    }
+}
+/* --- DOCUMENTATION LAYOUT (GfG/Wiki Style) --- */
+
+/* 1. Layout Container */
+.doc-layout {
+    display: grid;
+    /* 280px sidebar, remaining space for content */
+    grid-template-columns: 280px 1fr;
+    gap: 3rem;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    position: relative;
+    align-items: start; /* Important for sticky sidebar */
+}
+
+/* 2. Left Sidebar (Desktop) */
+.doc-sidebar {
+    position: sticky;
+    top: 90px; /* Offset for the sticky header */
+    height: calc(100vh - 100px); /* Full height minus header */
+    overflow-y: auto; /* Scrollable if list is long */
+    padding-right: 1rem;
+    border-right: 1px solid var(--border-color);
+}
+
+/* Sidebar Navigation Styling */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.nav-group h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+}
+
+.nav-group a {
+    display: block;
+    padding: 0.5rem 0.8rem;
+    color: var(--text-color);
+    border-radius: 4px;
+    font-size: 0.95rem;
+    border-left: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.nav-group a:hover {
+    background-color: var(--bg-accent);
+    color: var(--primary-btn);
+}
+
+.nav-group a.active {
+    background-color: var(--bg-accent);
+    border-left-color: var(--primary-btn);
+    color: var(--primary-btn);
+    font-weight: 600;
+}
+
+/* Scrollbar styling for sidebar */
+.doc-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.doc-sidebar::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 3px;
+}
+
+/* 3. Main Content Area */
+.doc-content {
+    min-width: 0; /* Prevents code blocks from overflowing grid */
+}
+
+.doc-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.doc-content h2 {
+    margin-top: 2.5rem;
+    padding-top: 2.5rem; /* spacing for anchor links */
+    font-size: 1.8rem;
+}
+
+/* Code Block Styling */
+.code-block {
+    /* Required for the button positioning */
+    position: relative; 
+    
+    /* Your existing styles */
+    background-color: var(--bg-accent);
+    padding: 1.5rem; /* Ensure enough padding so text doesn't hit button */
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 1.5rem 0;
+}
+
+/* The Copy Button */
+.copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    
+    background: var(--bg-color); /* Slightly different bg to pop */
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px;
+    
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+
+.copy-btn:hover {
+    opacity: 1;
+    background-color: var(--bg-secondary);
+    border-color: var(--text-muted);
+}
+
+.copy-btn svg {
+    pointer-events: none; /* Prevents clicking icon directly causing issues */
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+}
+
+/* Optional: Mobile adjustment to prevent overlap */
+@media (max-width: 600px) {
+    .code-block {
+        padding-top: 3rem; /* Push code down on very small screens if needed */
+    }
+}
+
+/* Divider */
+.divider {
+    border: 0;
+    height: 1px;
+    background: var(--border-color);
+    margin: 3rem 0;
+}
+
+/* 4. Mobile Elements (Hidden on Desktop) */
+.mobile-topics-bar, 
+.close-sidebar-btn,
+.sidebar-overlay {
+    display: none;
+}
+/* --- RESPONSIVE / MOBILE STYLES --- */
+@media (max-width: 900px) {
+    
+    :root {
+        /* Ensure this matches your actual header height variable */
+        --header-height: 70px; 
+    }
+
+    /* Change Grid to Stack */
+    .doc-layout {
+        display: block;
+        padding-top: 1rem;
+    }
+
+    /* 1. Container - Controls the Sticky Behavior */
+    .mobile-topics-bar {
+        display: flex;       /* Use Flex to align button */
+        align-items: center;
+        
+        /* STICKY MAGIC */
+        position: sticky;
+        top: var(--header-height); /* Sticks exactly below the navbar */
+        z-index: 890;              /* Just below the header's z-index */
+        
+        /* Layout & Spacing */
+        padding: 1rem 1.5rem;      /* Spacing around the button */
+        margin-bottom: 0;
+        
+        
+    }
+
+    /* 2. The Button Styling (Rounded Pill) */
+    .btn-sidebar-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        background-color: var(--bg-accent);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        
+        /* Fully Rounded Borders (Pill Shape) */
+        border-radius: 50px; 
+        
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-sidebar-toggle:hover {
+        border-color: var(--text-muted);
+        transform: translateY(-1px);
+    }
+
+    .btn-sidebar-toggle:active {
+        transform: scale(0.96);
+    }
+
+    /* 3. Sidebar Drawer (Hidden by default) */
+    .doc-sidebar {
+        position: fixed;
+        top: 0;
+        left: -300px;
+        width: 280px;
+        height: 100vh;
+        background-color: var(--bg-color);
+        z-index: 1100; /* Higher than everything */
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 1.5rem;
+    }
+
+    .doc-sidebar.active {
+        left: 0;
+    }
+
+    /* Sidebar Header */
+    .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 1rem;
+    }
+
+    .close-sidebar-btn {
+        display: block;
+        font-size: 2rem;
+        line-height: 1;
+        color: var(--text-muted);
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Overlay */
+    .sidebar-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 1050;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(2px);
+    }
+
+    .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
